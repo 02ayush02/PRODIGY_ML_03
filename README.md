@@ -1,93 +1,48 @@
-🐱🐶 Cat vs Dog Image Classification using SVM with HOG + PCA
-This project demonstrates a machine learning pipeline to classify images of cats and dogs using Support Vector Machine (SVM). We apply HOG feature extraction followed by PCA for dimensionality reduction to achieve robust performance.
+🐱🐶 Cat vs. Dog Image Classification using SVM
+
+This project demonstrates a practical approach to image classification using Support Vector Machines (SVM). The goal is to accurately distinguish between images of cats and dogs using computer vision techniques like HOG feature extraction and dimensionality reduction with PCA.
 
 📂 Dataset
-Training Data: train/train/
-Contains labeled images of cats and dogs (e.g., cat.1.jpg, dog.2.jpg).
-
-Testing Data: test1/test1/
-Contains unlabeled images (e.g., 1.jpg, 2.jpg) for which predictions are made.
-
-🔧 How This Project Works
-This project follows a systematic ML pipeline from feature extraction to classification:
-
-HOG Feature Extraction:
-Every image is resized to 128x128, converted to grayscale, and passed through the Histogram of Oriented Gradients (HOG) to capture edge features.
-
-PCA Dimensionality Reduction:
-We use PCA to reduce feature dimensions from ~8100 to 500 components while preserving most of the variance, improving training time and reducing overfitting.
-
-Standardization:
-Features are scaled using StandardScaler to normalize the data distribution before feeding into SVM.
-
-Model Training with GridSearch:
-The best SVM parameters (C, gamma) are chosen using GridSearchCV and the final model is trained on 8000 examples.
-
-Prediction & Submission:
-After preprocessing the test images, predictions are saved in a submission.csv file with filenames and predicted labels (cat or dog).
+- `train/train`: Contains labeled images of cats and dogs used for training.
+- `test1/test1`: Contains unlabeled test images to be classified as either cat or dog.
 
 📌 Features Used
-HOG (Histogram of Oriented Gradients):
+Instead of raw pixels, this model uses extracted features:
+- **HOG (Histogram of Oriented Gradients)**: Captures edge and texture patterns from grayscale images.
+- **PCA (Principal Component Analysis)**: Reduces the high-dimensional HOG features to 500 principal components for efficiency.
 
-orientations=9
-
-pixels_per_cell=(8, 8)
-
-cells_per_block=(2, 2)
-
-🧹 Data Preprocessing
-Converted 4-channel (RGBA) images to 3-channel (RGB) if necessary.
-
-Resized all images to (128, 128) for consistency.
-
-Converted images to grayscale before extracting HOG features.
-
-Applied PCA to reduce dimensionality.
-
-Scaled features using StandardScaler.
+🧹 Data Preprocessing & Feature Engineering
+- All images resized to **128x128** for uniformity.
+- Converted to **grayscale** for better HOG performance.
+- **HOG features** extracted with:
+  - 9 orientations
+  - 8×8 pixel per cell
+  - 2×2 cells per block
+- **PCA** applied to reduce the feature space from ~8100 to 500 while preserving ~95% variance.
 
 🧠 Model: Support Vector Machine (SVM)
-Trained using sklearn.SVC with RBF kernel.
-
-Parameters selected using GridSearchCV with 5-fold cross-validation:
-
-C: [0.1, 1, 10]
-
-gamma: ['scale', 0.1, 0.01]
-
-Best Parameters Found:
-
-C = 10, gamma = scale, kernel = rbf
+- Used `sklearn.svm.SVC` with RBF kernel.
+- Performed **GridSearchCV** to tune `C` and `gamma` hyperparameters.
+- Trained on a balanced subset of 8000 samples.
+- Split into 75% training and 25% validation.
 
 📈 Results
-Validation Accuracy: ~71.65%
+- **Validation Accuracy**: ~71.65%
+- Evaluated with `accuracy_score` and `classification_report`.
+- Demonstrated decent performance on unseen data for a traditional ML pipeline.
 
-Precision/Recall on Validation:
-
-Cat: P = 0.71, R = 0.74
-
-Dog: P = 0.73, R = 0.69
-
-This accuracy is based on a split of 8000 images from the training set.
-
-📁 Output
-The model is saved as svm_model_hog_pca.pkl.
-
-The prediction file is saved as submission.csv in the format:
-filename,label
-1.jpg,dog
-2.jpg,cat
-...
-
-🛠️ Requirements
-Make sure to install the required libraries:
-pip install numpy pandas scikit-learn scikit-image matplotlib
+🔍 Limitations
+- No deep learning used — accuracy is limited compared to CNNs.
+- Sensitive to lighting conditions and image quality.
+- Misclassifications on ambiguous or low-quality images.
 
 🚀 Future Improvements
-Try other models like Random Forest, CNN, or Gradient Boosting.
+- Upgrade to deep learning models (e.g., CNN with transfer learning).
+- Use color-based features or augment dataset with variations.
+- Incorporate more training data and apply data augmentation.
+- Use cross-validation for more robust evaluation.
 
-Use data augmentation to improve generalization.
+📁 Output
+- A trained model saved as `svm_model_hog_pca.pkl` (includes model, scaler, and PCA transformer).
+- A submission file `submission.csv` is generated with the following format:
 
-Explore deeper features using CNN (e.g., with transfer learning).
-
-Tune PCA components for better trade-off between speed and accuracy.
