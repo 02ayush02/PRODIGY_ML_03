@@ -1,48 +1,66 @@
-🐱🐶 Cat vs. Dog Image Classification using SVM
+# 🐱🐶 Cats vs Dogs Image Classification using SVM
 
-This project demonstrates a practical approach to image classification using Support Vector Machines (SVM). The goal is to accurately distinguish between images of cats and dogs using computer vision techniques like HOG feature extraction and dimensionality reduction with PCA.
+This project demonstrates an image classification pipeline to distinguish between cats and dogs using **Support Vector Machine (SVM)**. It uses **HOG (Histogram of Oriented Gradients)** features along with **PCA** and **Standardization** to train an effective classifier on labeled image data.
 
-📂 Dataset
-- `train/train`: Contains labeled images of cats and dogs used for training.
-- `test1/test1`: Contains unlabeled test images to be classified as either cat or dog.
+---
 
-📌 Features Used
-Instead of raw pixels, this model uses extracted features:
-- **HOG (Histogram of Oriented Gradients)**: Captures edge and texture patterns from grayscale images.
-- **PCA (Principal Component Analysis)**: Reduces the high-dimensional HOG features to 500 principal components for efficiency.
+## 📂 Dataset
 
-🧹 Data Preprocessing & Feature Engineering
-- All images resized to **128x128** for uniformity.
-- Converted to **grayscale** for better HOG performance.
-- **HOG features** extracted with:
-  - 9 orientations
-  - 8×8 pixel per cell
-  - 2×2 cells per block
-- **PCA** applied to reduce the feature space from ~8100 to 500 while preserving ~95% variance.
+- `train/` — Folder containing labeled images (e.g., `cat.0.jpg`, `dog.1.jpg`) used for training.
+- `test1/` — Folder containing unlabeled images for prediction.
+- `svm_model_hog_pca.pkl` — The saved trained model including the SVM, scaler, and PCA.
 
-🧠 Model: Support Vector Machine (SVM)
-- Used `sklearn.svm.SVC` with RBF kernel.
-- Performed **GridSearchCV** to tune `C` and `gamma` hyperparameters.
-- Trained on a balanced subset of 8000 samples.
-- Split into 75% training and 25% validation.
+---
 
-📈 Results
-- **Validation Accuracy**: ~71.65%
-- Evaluated with `accuracy_score` and `classification_report`.
-- Demonstrated decent performance on unseen data for a traditional ML pipeline.
+## ⚙️ How the Project Works
 
-🔍 Limitations
-- No deep learning used — accuracy is limited compared to CNNs.
-- Sensitive to lighting conditions and image quality.
-- Misclassifications on ambiguous or low-quality images.
+### 1. **Training Phase** (`train_svm_model.ipynb`)
+- Load and preprocess images from `train/`
+- Extract HOG features, apply PCA, and scale the features
+- Train an SVM classifier with hyperparameter tuning using GridSearchCV
+- Evaluate the model on a validation set
+- Save the trained model (`svm_model_hog_pca.pkl`)
 
-🚀 Future Improvements
-- Upgrade to deep learning models (e.g., CNN with transfer learning).
-- Use color-based features or augment dataset with variations.
-- Incorporate more training data and apply data augmentation.
-- Use cross-validation for more robust evaluation.
+### 2. **Prediction Phase** (`test_prediction.ipynb`)
+- Load the saved model, scaler, and PCA
+- Preprocess and extract features from test images (`test1/`)
+- Predict class labels (Cat or Dog)
+- Save the predictions to `submission.csv`
 
-📁 Output
-- A trained model saved as `svm_model_hog_pca.pkl` (includes model, scaler, and PCA transformer).
-- A submission file `submission.csv` is generated with the following format:
+---
 
+## 📌 Features Used
+
+- **HOG (Histogram of Oriented Gradients)**: Captures edge and shape information from grayscale images.
+- **PCA (Principal Component Analysis)**: Reduces feature dimensionality to improve performance and generalization.
+- **StandardScaler**: Standardizes features by removing the mean and scaling to unit variance.
+
+---
+
+## 🧹 Data Preprocessing
+
+- All images are resized to **128x128** pixels.
+- Converted to grayscale for consistency.
+- Extracted HOG descriptors are reduced to 500 dimensions using PCA.
+- Features are standardized using `StandardScaler`.
+
+---
+
+## 🧠 Model: SVM (Support Vector Machine)
+
+- SVM with RBF kernel (`sklearn.svm.SVC`) is used.
+- Hyperparameters (`C`, `gamma`) tuned using `GridSearchCV` with 5-fold cross-validation.
+- The model is evaluated on a 75:25 train-validation split.
+
+---
+
+## 📈 Results
+
+- Achieved accuracy of ~**71.35%** on the validation set *(replace with actual value)*.
+- Predictions are exported in the following format:
+
+```csv
+filename,label
+1.jpg,dog
+2.jpg,cat
+...
