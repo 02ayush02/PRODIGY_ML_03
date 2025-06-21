@@ -14,14 +14,14 @@ This project demonstrates an image classification pipeline to distinguish betwee
 
 ## ⚙️ How the Project Works
 
-### 1. **Training Phase** (`train_svm_model.ipynb`)
+### 1. **Training Phase** (`Dogs_vs_Cats.ipynb`)
 - Load and preprocess images from `train/`
 - Extract HOG features, apply PCA, and scale the features
 - Train an SVM classifier with hyperparameter tuning using GridSearchCV
 - Evaluate the model on a validation set
 - Save the trained model (`svm_model_hog_pca.pkl`)
 
-### 2. **Prediction Phase** (`test_prediction.ipynb`)
+### 2. **Prediction Phase** (`Dogs-vs-Cats-Test.ipynb`)
 - Load the saved model, scaler, and PCA
 - Preprocess and extract features from test images (`test1/`)
 - Predict class labels (Cat or Dog)
